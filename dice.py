@@ -1,38 +1,26 @@
-# Copyright Chai Nunes 2015. MIT Liscence.
+# Copyright Chai Nunes 2016. MIT Liscence.
 import random, os
 
 class Dice:
-    result = []
-    total = 0
+    def __init__(self, sides=1):
+        self.sides = sides
+        self.result = []
+        self.total = 0
 
-    def __roll_(sides=1):
-        return random.randint(1, sides)
+    def _roll(self):
+        return random.randint(1, self.sides)
 
-    def roll(sides=1, times=1):
-        for time in range(0, times):
-            Dice.result.append(Dice.__roll_(sides))
-            Dice.result = Dice.result[len(Dice.result) - times:len(Dice.result)]
-        Dice.sumResult()
-        return Dice.result
+    def roll(self, times=1):
+        self.result[:] = [self._roll() for time in range(times)]
+        self.sum_result()
 
-    def sumResult():
-        Dice.total = 0
-        for num in range(0, len(Dice.result)):
-            Dice.total += Dice.result[num]
-        return Dice.total
+    def sum_result(self):
+        self.total = sum(self.result)
 
-    def saveResult(directory=''):
-        if directory == '':
-            savetxt = open('savedResult.txt', 'a+')
-        else:
-            savetxt = open(os.path.join(directory, 'savedResult.txt'), 'a+')
-        savetxt.write(str(Dice.result) + '\n')
-        savetxt.close()
+    def save_result(self, directory=''):
+        with open(os.path.join(directory, 'savedResult.txt'), 'a') as txt:
+            txt.write('%s\n' % ', '.join(map(str, self.result)))
 
-    def saveTotal(directory=''):
-        if directory == '':
-            savetxt = open('savedTotal.txt', 'a+')
-        else:
-            savetxt = open(os.path.join(directory, 'savedTotal.txt'), 'a+')
-        savetxt.write(str(Dice.total) + '\n')
-        savetxt.close()
+    def save_total(directory=''):
+        with open(os.path.join(directory, 'savedTotal.txt'), 'a') as txt:
+            txt.write('%d\n' % self.total)
